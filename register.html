@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Registration | Nexgen Hospitals</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="app.css">
+</head>
+<body data-page="register">
+    <div class="auth-shell register-shell">
+        <a class="brand compact-brand" href="index.html">
+            <img src="assets/nexgen-logo.svg" alt="Nexgen Hospitals logo">
+            <div>
+                <span class="brand-name">Nexgen Hospitals</span>
+                <span class="brand-sub">Patient registration</span>
+            </div>
+        </a>
+
+        <main class="auth-layout">
+            <section class="auth-side">
+                <p class="eyebrow">Patient Onboarding</p>
+                <h1>Create a patient account to unlock appointments and record access.</h1>
+                <p>Only patients can register here. Once registered, they can log in, view bills, and manage appointment requests.</p>
+                <div class="registration-points">
+                    <span>Patient details saved</span>
+                    <span>Gender captured</span>
+                    <span>Email optional</span>
+                </div>
+            </section>
+
+            <section class="auth-card">
+                <form id="registerForm" class="auth-form">
+                    <div class="field-grid">
+                        <div class="field">
+                            <label for="patientName">Patient Name</label>
+                            <input id="patientName" name="name" type="text" placeholder="Full name" required>
+                        </div>
+                        <div class="field">
+                            <label for="patientAge">Patient Age</label>
+                            <input id="patientAge" name="age" type="number" min="0" max="120" placeholder="Age" required>
+                        </div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <label for="patientGender">Gender</label>
+                            <select id="patientGender" name="gender" required>
+                                <option value="">Select gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="patientPhoneNumber">Phone Number</label>
+                            <input id="patientPhoneNumber" name="phone" type="tel" placeholder="10-digit mobile number" required>
+                        </div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <label for="patientEmail">Email (Optional)</label>
+                            <input id="patientEmail" name="email" type="email" placeholder="email@example.com">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="patientPasswordRegister">Password</label>
+                        <input id="patientPasswordRegister" name="password" type="password" placeholder="Create a password" required>
+                    </div>
+
+                    <button class="cta-button full-width" type="submit">Register Patient</button>
+                </form>
+
+                <p id="registerMessage" class="status-message" aria-live="polite"></p>
+                <p class="switch-copy">Already registered? <a href="login.html">Login here</a></p>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

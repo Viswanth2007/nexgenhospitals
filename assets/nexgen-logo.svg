@@ -1,0 +1,25 @@
+<svg width="430" height="220" viewBox="0 0 430 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="shield" x1="33" y1="16" x2="146" y2="186" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#16C7C8"/>
+      <stop offset="1" stop-color="#235EC9"/>
+    </linearGradient>
+    <linearGradient id="arrow" x1="68" y1="46" x2="177" y2="148" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#17C9C7"/>
+      <stop offset="1" stop-color="#5AAEF8"/>
+    </linearGradient>
+    <linearGradient id="cross" x1="43" y1="84" x2="120" y2="164" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#16C7C8"/>
+      <stop offset="1" stop-color="#2850C8"/>
+    </linearGradient>
+  </defs>
+  <path d="M82 13L130 29L178 13L176 96C174 137 148 171 106 197C64 171 38 137 36 96L34 29L82 13Z" fill="url(#shield)" opacity="0.18"/>
+  <path d="M82 18L129 33L173 20L170 95C168 131 145 162 106 184C67 162 44 131 42 95L39 33L82 18Z" stroke="url(#shield)" stroke-width="16" stroke-linejoin="round"/>
+  <path d="M63 94H91V66H117V94H145V120H117V148H91V120H63V94Z" fill="url(#cross)"/>
+  <path d="M53 153L145 42" stroke="url(#arrow)" stroke-width="22" stroke-linecap="round"/>
+  <path d="M129 43L153 29L150 56" stroke="url(#arrow)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M139 28L152 54" stroke="url(#arrow)" stroke-width="10" stroke-linecap="round"/>
+  <path d="M123 41L144 56" stroke="url(#arrow)" stroke-width="10" stroke-linecap="round"/>
+  <text x="200" y="96" fill="#0C4D8D" font-family="Outfit, Arial, sans-serif" font-size="62" font-weight="700">NexGen</text>
+  <text x="202" y="156" fill="#0B78D0" font-family="Outfit, Arial, sans-serif" font-size="56" font-weight="700" letter-spacing="0.08em">HOSPITALS</text>
+</svg>

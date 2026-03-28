@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Desk Dashboard | Nexgen Hospitals</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="app.css">
+</head>
+<body>
+    <div class="dashboard-shell">
+        <aside class="dashboard-sidebar">
+            <a class="brand compact-brand" href="index.html">
+                <img src="assets/nexgen-logo.svg" alt="Nexgen Hospitals logo">
+                <div>
+                    <span class="brand-name">Nexgen Hospitals</span>
+                    <span class="brand-sub">Billing and cashier dashboard</span>
+                </div>
+            </a>
+
+            <nav class="dashboard-nav">
+                <a href="#employee-overview">Overview</a>
+                <a href="#billing-desk">Billing Desk</a>
+                <a href="#cashier-desk">Cashier Desk</a>
+            </nav>
+
+            <button id="employeeLogoutButton" class="secondary-button full-width" type="button">Logout</button>
+        </aside>
+
+        <main class="dashboard-main">
+            <section id="employee-overview" class="dashboard-hero">
+                <div>
+                    <p class="eyebrow">Employee Portal</p>
+                    <h1 id="employeeWelcomeHeading">Welcome Employee</h1>
+                    <p class="hero-text">Billing desk staff generate treatment bills, and cashiers at the payment desk accept the payment after that.</p>
+                </div>
+                <div class="overview-chip-group">
+                    <span>Employee login active</span>
+                    <span>Billing generation enabled</span>
+                    <span>Cashier payment acceptance</span>
+                </div>
+            </section>
+
+            <section class="panel">
+                <div class="panel-header">
+                    <div>
+                        <p class="card-label">Employee Access</p>
+                        <h2>Logged-in desk employee</h2>
+                    </div>
+                </div>
+                <div class="profile-card">
+                    <div class="profile-row"><span>Employee Name</span><span id="employeeNameValue">Employee</span></div>
+                    <div class="profile-row"><span>Employee ID</span><span id="employeeIdValue">-</span></div>
+                    <div class="profile-row"><span>Role</span><span id="employeeRoleValue">-</span></div>
+                </div>
+            </section>
+
+            <section id="billing-desk" class="panel">
+                <div class="panel-header">
+                    <div>
+                        <p class="card-label">Billing Desk</p>
+                        <h2>Create bills after treatment</h2>
+                    </div>
+                    <p class="panel-note">Billing desk employees generate the bill amount only after treatment is completed or approved.</p>
+                </div>
+                <p id="billingDeskMessage" class="status-message" aria-live="polite"></p>
+                <div id="billingAppointmentsList" class="record-list"></div>
+            </section>
+
+            <section id="cashier-desk" class="panel">
+                <div class="panel-header">
+                    <div>
+                        <p class="card-label">Cashier Desk</p>
+                        <h2>Accept payment at the payment desk</h2>
+                    </div>
+                    <p class="panel-note">Cashiers can only accept payment after billing desk has generated the bill.</p>
+                </div>
+                <p id="cashierDeskMessage" class="status-message" aria-live="polite"></p>
+                <div id="employeeBillsList" class="record-list"></div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

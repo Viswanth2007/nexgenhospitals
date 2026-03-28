@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Nexgen Hospitals</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="app.css">
+</head>
+<body data-page="login">
+    <div class="auth-shell">
+        <a class="brand compact-brand" href="index.html">
+            <img src="assets/nexgen-logo.svg" alt="Nexgen Hospitals logo">
+            <div>
+                <span class="brand-name">Nexgen Hospitals</span>
+                <span class="brand-sub">Secure patient access</span>
+            </div>
+        </a>
+
+        <main class="auth-layout">
+            <section class="auth-side">
+                <p class="eyebrow">Welcome Back</p>
+                <h1>Access care pathways, records, and appointments.</h1>
+                <p>Choose your role to continue. Patient login is active. Doctor login UI is ready for your backend route if you want to connect it later.</p>
+                <img class="auth-illustration" src="assets/hospital-hero.svg" alt="Hospital management illustration">
+            </section>
+
+            <section class="auth-card">
+                <div class="segmented-control segmented-control-three" role="tablist" aria-label="Login roles">
+                    <button class="segment is-active" type="button" data-role-tab="patient">Patient</button>
+                    <button class="segment" type="button" data-role-tab="doctor">Doctor</button>
+                    <button class="segment" type="button" data-role-tab="employee">Employee</button>
+                </div>
+
+                <form id="patientLoginForm" class="auth-form">
+                    <div class="field">
+                        <label for="patientPhone">Phone Number</label>
+                        <input id="patientPhone" name="phone" type="tel" placeholder="Enter registered phone number" required>
+                    </div>
+                    <div class="field">
+                        <label for="patientPassword">Password</label>
+                        <input id="patientPassword" name="password" type="password" placeholder="Enter password" required>
+                    </div>
+                    <button class="cta-button full-width" type="submit">Login as Patient</button>
+                    <p class="form-note">If you have not registered, you cannot log in to the patient account.</p>
+                </form>
+
+                <form id="doctorLoginForm" class="auth-form hidden">
+                    <div class="field">
+                        <label for="doctorId">Doctor ID</label>
+                        <input id="doctorId" name="doctorId" type="text" placeholder="Enter doctor ID">
+                    </div>
+                    <div class="field">
+                        <label for="doctorPassword">Password</label>
+                        <input id="doctorPassword" name="password" type="password" placeholder="Enter password">
+                    </div>
+                    <button class="cta-button full-width" type="submit">Login as Doctor</button>
+                    <p class="form-note">Doctor login expects a backend endpoint such as <code>/doctor-login</code>.</p>
+                </form>
+
+                <form id="employeeLoginForm" class="auth-form hidden">
+                    <div class="field">
+                        <label for="employeeId">Employee ID</label>
+                        <input id="employeeId" name="employeeId" type="text" placeholder="Enter employee ID">
+                    </div>
+                    <div class="field">
+                        <label for="employeePassword">Password</label>
+                        <input id="employeePassword" name="password" type="password" placeholder="Enter password">
+                    </div>
+                    <button class="cta-button full-width" type="submit">Login as Employee</button>
+                    <p class="form-note">Billing desk employees generate bills, and cashiers at the payment desk accept payment from their dashboard.</p>
+                </form>
+
+                <p id="authMessage" class="status-message" aria-live="polite"></p>
+                <p class="switch-copy">Don't have an account? <a href="register.html">Register as a patient</a></p>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

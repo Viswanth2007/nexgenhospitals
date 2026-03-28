@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard | Nexgen Hospitals</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="app.css">
+</head>
+<body data-page="dashboard">
+    <div class="dashboard-shell">
+        <aside class="dashboard-sidebar">
+            <a class="brand compact-brand" href="index.html">
+                <img src="assets/nexgen-logo.svg" alt="Nexgen Hospitals logo">
+                <div>
+                    <span class="brand-name">Nexgen Hospitals</span>
+                    <span class="brand-sub">Patient dashboard</span>
+                </div>
+            </a>
+
+            <nav class="dashboard-nav">
+                <a href="#overview">Overview</a>
+                <a href="#appointments">Book Appointment</a>
+                <a href="#billing">Billing</a>
+                <a href="#records">Medical Records</a>
+            </nav>
+
+            <button id="logoutButton" class="secondary-button full-width" type="button">Logout</button>
+        </aside>
+
+        <main class="dashboard-main">
+            <section id="overview" class="dashboard-hero">
+                <div>
+                    <p class="eyebrow">Patient Portal</p>
+                    <h1 id="welcomeHeading">Welcome to Nexgen Hospitals</h1>
+                    <p id="overviewProblem" class="hero-text"></p>
+                </div>
+                <div class="overview-chip-group">
+                    <span>Appointment-ready</span>
+                    <span>Offline billing support</span>
+                    <span>Record visibility</span>
+                </div>
+            </section>
+
+            <section id="appointments" class="panel">
+                <div class="panel-header">
+                    <div>
+                        <p class="card-label">Appointments</p>
+                        <h2>Book your next consultation</h2>
+                    </div>
+                    <p class="panel-note">You must be logged in to submit this form.</p>
+                </div>
+
+                <form id="appointmentForm" class="appointment-form">
+                    <div class="field-grid">
+                        <div class="field">
+                            <label for="department">Department</label>
+                            <select id="department" name="department" required>
+                                <option value="">Select department</option>
+                                <option value="Dermatology">Dermatology</option>
+                                <option value="Cardiology">Cardiology</option>
+                                <option value="Neurology">Neurology</option>
+                                <option value="Orthopedics">Orthopedics</option>
+                                <option value="General Medicine">General Medicine</option>
+                                <option value="Pediatrics">Pediatrics</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="appointmentDate">Appointment Date</label>
+                            <input id="appointmentDate" name="appointmentDate" type="date" required>
+                        </div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <label for="appointmentTime">Appointment Time</label>
+                            <input id="appointmentTime" name="appointmentTime" type="time" required>
+                        </div>
+                        <div class="field">
+                            <label for="visitMode">Visit Type</label>
+                            <select id="visitMode" name="visitMode" required>
+                                <option value="General Consultation">General Consultation</option>
+                                <option value="Specialist Review">Specialist Review</option>
+                                <option value="Follow-up">Follow-up</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="appointmentProblem">Problem Summary</label>
+                        <textarea id="appointmentProblem" name="problem" rows="4" placeholder="Briefly describe the issue for this appointment" required></textarea>
+                    </div>
+
+                    <button class="cta-button" type="submit">Submit Appointment Request</button>
+                </form>
+
+                <p id="appointmentMessage" class="status-message" aria-live="polite"></p>
+
+                <div class="table-card">
+                    <h3>Recent Appointments</h3>
+                    <div id="appointmentsList" class="record-list"></div>
+                </div>
+            </section>
+
+            <section id="billing" class="panel">
+                <div class="panel-header">
+                    <div>
+                        <p class="card-label">Billing</p>
+                        <h2>Offline billing, online status view</h2>
+                    </div>
+                </div>
+                <div id="billingList" class="billing-grid"></div>
+            </section>
+
+            <section id="records" class="panel">
+                <div class="panel-header">
+                    <div>
+                        <p class="card-label">Profile & Records</p>
+                        <h2>Your saved patient information</h2>
+                    </div>
+                </div>
+                <div id="profileCard" class="profile-card"></div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
