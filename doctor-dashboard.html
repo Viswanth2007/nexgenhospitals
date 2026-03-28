@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard | Nexgen Hospitals</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="app.css">
+</head>
+<body>
+    <div class="dashboard-shell">
+        <aside class="dashboard-sidebar">
+            <a class="brand compact-brand" href="index.html">
+                <img src="assets/nexgen-logo.svg" alt="Nexgen Hospitals logo">
+                <div>
+                    <span class="brand-name">Nexgen Hospitals</span>
+                    <span class="brand-sub">Doctor dashboard</span>
+                </div>
+            </a>
+
+            <nav class="dashboard-nav">
+                <a href="#doctor-overview">Overview</a>
+                <a href="#doctor-note">Doctor Access</a>
+            </nav>
+
+            <button id="doctorLogoutButton" class="secondary-button full-width" type="button">Logout</button>
+        </aside>
+
+        <main class="dashboard-main">
+            <section id="doctor-overview" class="dashboard-hero">
+                <div>
+                    <p class="eyebrow">Doctor Portal</p>
+                    <h1 id="doctorWelcomeHeading">Welcome Doctor</h1>
+                    <p class="hero-text">Doctor login is now connected to the backend route. You can extend this page with schedules, appointments, and patient review tools.</p>
+                </div>
+                <div class="overview-chip-group">
+                    <span>Doctor login active</span>
+                    <span>Backend validated</span>
+                    <span>Appointment actions enabled</span>
+                </div>
+            </section>
+
+            <section id="doctor-note" class="panel">
+                <div class="panel-header">
+                    <div>
+                        <p class="card-label">Current Status</p>
+                        <h2>Doctor authentication is enabled</h2>
+                    </div>
+                </div>
+                <div class="profile-card">
+                    <div class="profile-row"><span>Doctor Name</span><span id="doctorNameValue">Doctor</span></div>
+                    <div class="profile-row"><span>Doctor ID</span><span id="doctorIdValue">-</span></div>
+                    <div class="profile-row"><span>Department</span><span id="doctorDepartmentValue">-</span></div>
+                </div>
+            </section>
+
+            <section id="doctor-appointments" class="panel">
+                <div class="panel-header">
+                    <div>
+                        <p class="card-label">Appointment Requests</p>
+                        <h2>Accept or reject your department appointments</h2>
+                    </div>
+                    <p class="panel-note">Only appointments from your own department are shown here.</p>
+                </div>
+                <p id="doctorAppointmentMessage" class="status-message" aria-live="polite"></p>
+                <div id="doctorAppointmentsList" class="record-list"></div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
