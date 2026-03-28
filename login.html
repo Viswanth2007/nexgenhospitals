@@ -34,7 +34,7 @@
                     <button class="segment" type="button" data-role-tab="employee">Employee</button>
                 </div>
 
-                <form id="patientLoginForm" class="auth-form">
+                <form id="patientLoginForm" class="auth-form" action="#" method="post">
                     <div class="field">
                         <label for="patientPhone">Phone Number</label>
                         <input id="patientPhone" name="phone" type="tel" placeholder="Enter registered phone number" required>
@@ -47,10 +47,10 @@
                     <p class="form-note">If you have not registered, you cannot log in to the patient account.</p>
                 </form>
 
-                <form id="doctorLoginForm" class="auth-form hidden">
+                <form id="doctorLoginForm" class="auth-form hidden" action="#" method="post">
                     <div class="field">
-                        <label for="doctorId">Doctor ID</label>
-                        <input id="doctorId" name="doctorId" type="text" placeholder="Enter doctor ID">
+                        <label for="doctorId">Doctor ID / Phone</label>
+                        <input id="doctorId" name="doctorId" type="text" placeholder="Enter doctor ID or doctor phone">
                     </div>
                     <div class="field">
                         <label for="doctorPassword">Password</label>
@@ -60,7 +60,7 @@
                     <p class="form-note">Doctor login expects a backend endpoint such as <code>/doctor-login</code>.</p>
                 </form>
 
-                <form id="employeeLoginForm" class="auth-form hidden">
+                <form id="employeeLoginForm" class="auth-form hidden" action="#" method="post">
                     <div class="field">
                         <label for="employeeId">Employee ID</label>
                         <input id="employeeId" name="employeeId" type="text" placeholder="Enter employee ID">

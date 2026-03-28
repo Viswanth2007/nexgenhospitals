@@ -197,9 +197,9 @@ app.put("/payment/:id", (req, res) => {
 app.post("/doctor-login", (req, res) => {
     const { doctorId, password } = req.body;
 
-    const sql = "SELECT * FROM doctors WHERE doctor_id = ? AND password = ?";
+    const sql = "SELECT * FROM doctors WHERE (doctor_id = ? OR phone = ?) AND password = ?";
 
-    db.query(sql, [doctorId, password], (err, result) => {
+    db.query(sql, [doctorId, doctorId, password], (err, result) => {
         if (err) {
             res.status(500).send(err);
         } else {
