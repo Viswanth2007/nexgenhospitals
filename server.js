@@ -67,11 +67,80 @@ app.post("/login", (req, res) => {
             res.status(500).send(err);
         } else {
             if (result.length > 0) {
-                res.send("Login Successful");
+                res.json({
+                    message: "Login Successful",
+                    patient: result[0]
+                });
             } else {
                 res.send("Invalid Credentials");
             }
         }
+    });
+});
+
+// Update Patient Profile
+app.put("/patient-profile/:id", (req, res) => {
+    const patientId = req.params.id;
+    const { name, age, gender, phone, password } = req.body;
+
+    const sql = `
+        UPDATE patients
+        SET name = ?, age = ?, gender = ?, phone = ?, password = ?
+        WHERE patient_id = ?
+    `;
+
+    db.query(sql, [name, age, gender, phone, password, patientId], (err) => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.json({ message: "Patient profile updated successfully" });
+        }
+    });
+});
+
+// Delete Patient Account
+app.delete("/patient-profile/:id", (req, res) => {
+    const patientId = req.params.id;
+
+    const findAppointmentsSql = "SELECT appointment_id FROM appointments WHERE patient_id = ?";
+
+    db.query(findAppointmentsSql, [patientId], (findError, appointments) => {
+        if (findError) {
+            res.status(500).send(findError);
+            return;
+        }
+
+        const appointmentIds = appointments.map((item) => item.appointment_id);
+        const deletePatient = () => {
+            db.query("DELETE FROM patients WHERE patient_id = ?", [patientId], (err) => {
+                if (err) {
+                    res.status(500).send(err);
+                } else {
+                    res.json({ message: "Patient account deleted successfully" });
+                }
+            });
+        };
+
+        if (!appointmentIds.length) {
+            deletePatient();
+            return;
+        }
+
+        db.query("DELETE FROM billing WHERE appointment_id IN (?)", [appointmentIds], (billingError) => {
+            if (billingError) {
+                res.status(500).send(billingError);
+                return;
+            }
+
+            db.query("DELETE FROM appointments WHERE patient_id = ?", [patientId], (appointmentError) => {
+                if (appointmentError) {
+                    res.status(500).send(appointmentError);
+                    return;
+                }
+
+                deletePatient();
+            });
+        });
     });
 });
 
@@ -217,6 +286,26 @@ app.post("/doctor-login", (req, res) => {
     });
 });
 
+// Update Doctor Profile
+app.put("/doctor-profile/:id", (req, res) => {
+    const doctorId = req.params.id;
+    const { name, specialization, phone, password } = req.body;
+
+    const sql = `
+        UPDATE doctors
+        SET name = ?, specialization = ?, phone = ?, password = ?
+        WHERE doctor_id = ?
+    `;
+
+    db.query(sql, [name, specialization, phone, password, doctorId], (err) => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.json({ message: "Doctor profile updated successfully" });
+        }
+    });
+});
+
 // Employee Login
 app.post("/employee-login", (req, res) => {
     const { employeeId, password } = req.body;
@@ -237,6 +326,26 @@ app.post("/employee-login", (req, res) => {
                     message: "Invalid Employee Credentials"
                 });
             }
+        }
+    });
+});
+
+// Update Employee Profile
+app.put("/employee-profile/:id", (req, res) => {
+    const employeeId = req.params.id;
+    const { name, designation, phone, password } = req.body;
+
+    const sql = `
+        UPDATE employees
+        SET name = ?, designation = ?, phone = ?, password = ?
+        WHERE emp_id = ?
+    `;
+
+    db.query(sql, [name, designation, phone, password, employeeId], (err) => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.json({ message: "Employee profile updated successfully" });
         }
     });
 });

@@ -122,6 +122,44 @@
                     </div>
                 </div>
                 <div id="profileCard" class="profile-card"></div>
+                <form id="patientProfileForm" class="appointment-form">
+                    <div class="field-grid">
+                        <div class="field">
+                            <label for="profilePatientName">Patient Name</label>
+                            <input id="profilePatientName" name="name" type="text" required>
+                        </div>
+                        <div class="field">
+                            <label for="profilePatientAge">Age</label>
+                            <input id="profilePatientAge" name="age" type="number" min="0" max="120" required>
+                        </div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <label for="profilePatientGender">Gender</label>
+                            <select id="profilePatientGender" name="gender" required>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="profilePatientPhone">Phone Number</label>
+                            <input id="profilePatientPhone" name="phone" type="tel" required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="profilePatientPassword">Password</label>
+                        <input id="profilePatientPassword" name="password" type="password" required>
+                    </div>
+
+                    <div class="record-item-actions">
+                        <button class="cta-button" type="submit">Update Profile</button>
+                        <button id="deletePatientAccountButton" class="mini-button reject" type="button">Delete Account</button>
+                    </div>
+                </form>
+                <p id="patientProfileMessage" class="status-message" aria-live="polite"></p>
             </section>
         </main>
     </div>

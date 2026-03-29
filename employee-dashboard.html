@@ -55,6 +55,32 @@
                     <div class="profile-row"><span>Employee ID</span><span id="employeeIdValue">-</span></div>
                     <div class="profile-row"><span>Role</span><span id="employeeRoleValue">-</span></div>
                 </div>
+                <form id="employeeProfileForm" class="appointment-form">
+                    <div class="field-grid">
+                        <div class="field">
+                            <label for="employeeProfileName">Name</label>
+                            <input id="employeeProfileName" name="name" type="text" required>
+                        </div>
+                        <div class="field">
+                            <label for="employeeProfileDesignation">Designation</label>
+                            <input id="employeeProfileDesignation" name="designation" type="text" required>
+                        </div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <label for="employeeProfilePhone">Phone Number</label>
+                            <input id="employeeProfilePhone" name="phone" type="tel" required>
+                        </div>
+                        <div class="field">
+                            <label for="employeeProfilePassword">Password</label>
+                            <input id="employeeProfilePassword" name="password" type="password" required>
+                        </div>
+                    </div>
+
+                    <button class="cta-button" type="submit">Update Profile</button>
+                </form>
+                <p id="employeeProfileMessage" class="status-message" aria-live="polite"></p>
             </section>
 
             <section id="billing-desk" class="panel">

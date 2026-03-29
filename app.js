@@ -76,6 +76,16 @@ async function tryPut(endpoint, payload) {
     return { ok: response.ok, data };
 }
 
+async function tryDelete(endpoint) {
+    const response = await fetch(`${API_BASE}${endpoint}`, {
+        method: "DELETE"
+    });
+
+    const contentType = response.headers.get("content-type") || "";
+    const data = contentType.includes("application/json") ? await response.json() : await response.text();
+    return { ok: response.ok, data };
+}
+
 function ensureLoggedIn(redirectTarget = "dashboard.html") {
     if (!getLoggedInPatient()) {
         window.location.href = `login.html?redirect=${encodeURIComponent(redirectTarget)}`;
@@ -246,10 +256,15 @@ function initLoginPage() {
 
         try {
             const result = await tryPost("/login", { phone, password });
-            if (result.ok && typeof result.data === "string" && /successful/i.test(result.data)) {
-                const patient = savedProfile && savedProfile.phone === phone
-                    ? savedProfile
-                    : { name: "Patient", phone, age: "--", gender: "--", email: "" };
+            if (result.ok && (
+                (typeof result.data === "string" && /successful/i.test(result.data)) ||
+                (typeof result.data === "object" && result.data.patient)
+            )) {
+                const patient = typeof result.data === "object" && result.data.patient
+                    ? result.data.patient
+                    : savedProfile && savedProfile.phone === phone
+                        ? savedProfile
+                        : { name: "Patient", phone, age: "--", gender: "--", email: "" };
                 setLoggedInPatient(patient);
                 showMessage(messageEl, "Login successful. Redirecting...", "success");
                 window.setTimeout(() => {
@@ -508,6 +523,15 @@ function renderProfile() {
         <div class="profile-row"><span>Phone</span><span>${patient.phone}</span></div>
         <div class="profile-row"><span>Email</span><span>${patient.email || "Not provided"}</span></div>
     `;
+
+    const form = document.getElementById("patientProfileForm");
+    if (form) {
+        form.elements.namedItem("name").value = patient.name || "";
+        form.elements.namedItem("age").value = patient.age || "";
+        form.elements.namedItem("gender").value = patient.gender || "Male";
+        form.elements.namedItem("phone").value = patient.phone || "";
+        form.elements.namedItem("password").value = patient.password || "";
+    }
 }
 
 function initDashboardPage() {
@@ -527,6 +551,8 @@ function initDashboardPage() {
     const appointmentMessage = document.getElementById("appointmentMessage");
     const patient = getLoggedInPatient();
     const appointmentDateInput = document.getElementById("appointmentDate");
+    const patientProfileForm = document.getElementById("patientProfileForm");
+    const patientProfileMessage = document.getElementById("patientProfileMessage");
 
     updateAppointmentDateTimeLimits();
     appointmentDateInput.addEventListener("change", updateAppointmentDateTimeLimits);
@@ -577,6 +603,52 @@ function initDashboardPage() {
         localStorage.removeItem(STORAGE_KEYS.patient);
         window.location.href = "index.html";
     });
+
+    patientProfileForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const formData = new FormData(patientProfileForm);
+        const updatedPatient = {
+            ...getLoggedInPatient(),
+            name: formData.get("name").trim(),
+            age: formData.get("age").trim(),
+            gender: formData.get("gender").trim(),
+            phone: formData.get("phone").trim(),
+            password: formData.get("password").trim()
+        };
+
+        try {
+            if (updatedPatient.patient_id) {
+                await tryPut(`/patient-profile/${updatedPatient.patient_id}`, updatedPatient);
+            }
+        } catch (error) {
+            // Keep UI state editable if backend update is temporarily unavailable.
+        }
+
+        setLoggedInPatient(updatedPatient);
+        setPatientProfile(updatedPatient);
+        renderProfile();
+        showMessage(patientProfileMessage, "Patient profile updated successfully.", "success");
+    });
+
+    document.getElementById("deletePatientAccountButton").addEventListener("click", async () => {
+        const currentPatient = getLoggedInPatient();
+        const confirmed = window.confirm("Are you sure you want to delete your patient account?");
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+            if (currentPatient && currentPatient.patient_id) {
+                await tryDelete(`/patient-profile/${currentPatient.patient_id}`);
+            }
+        } catch (error) {
+            // Continue cleanup locally if backend deletion fails.
+        }
+
+        localStorage.removeItem(STORAGE_KEYS.patient);
+        localStorage.removeItem(STORAGE_KEYS.profile);
+        window.location.href = "register.html";
+    });
 }
 
 function initDoctorDashboardPage() {
@@ -601,7 +673,14 @@ function initDoctorDashboardPage() {
     document.getElementById("doctorDepartmentValue").textContent = doctorDepartment;
     renderDoctorAppointments();
 
+    const doctorProfileForm = document.getElementById("doctorProfileForm");
+    doctorProfileForm.elements.namedItem("name").value = doctor.name || "";
+    doctorProfileForm.elements.namedItem("specialization").value = doctor.specialization || doctorDepartment || "";
+    doctorProfileForm.elements.namedItem("phone").value = doctor.phone || "";
+    doctorProfileForm.elements.namedItem("password").value = doctor.password || "";
+
     const messageEl = document.getElementById("doctorAppointmentMessage");
+    const doctorProfileMessage = document.getElementById("doctorProfileMessage");
     const appointmentList = document.getElementById("doctorAppointmentsList");
 
     appointmentList.addEventListener("click", async (event) => {
@@ -627,6 +706,29 @@ function initDoctorDashboardPage() {
     document.getElementById("doctorLogoutButton").addEventListener("click", () => {
         localStorage.removeItem(STORAGE_KEYS.doctor);
         window.location.href = "index.html";
+    });
+
+    doctorProfileForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const formData = new FormData(doctorProfileForm);
+        const updatedDoctor = {
+            ...doctor,
+            name: formData.get("name").trim(),
+            specialization: formData.get("specialization").trim(),
+            phone: formData.get("phone").trim(),
+            password: formData.get("password").trim()
+        };
+
+        try {
+            await tryPut(`/doctor-profile/${doctor.doctor_id}`, updatedDoctor);
+        } catch (error) {
+            // Keep local profile editable even if backend is temporarily unreachable.
+        }
+
+        setStoredValue(STORAGE_KEYS.doctor, updatedDoctor);
+        document.getElementById("doctorNameValue").textContent = updatedDoctor.name;
+        document.getElementById("doctorDepartmentValue").textContent = updatedDoctor.specialization;
+        showMessage(doctorProfileMessage, "Doctor profile updated successfully.", "success");
     });
 }
 
@@ -718,6 +820,12 @@ function initEmployeeDashboardPage() {
     document.getElementById("employeeIdValue").textContent = employeeId;
     document.getElementById("employeeRoleValue").textContent = employeeRole;
 
+    const employeeProfileForm = document.getElementById("employeeProfileForm");
+    employeeProfileForm.elements.namedItem("name").value = employee.name || "";
+    employeeProfileForm.elements.namedItem("designation").value = employee.designation || employeeRole || "";
+    employeeProfileForm.elements.namedItem("phone").value = employee.phone || "";
+    employeeProfileForm.elements.namedItem("password").value = employee.password || "";
+
     if (isBillingRole(employeeRole) && !isCashierRole(employeeRole)) {
         cashierSection.classList.add("hidden");
     } else if (isCashierRole(employeeRole) && !isBillingRole(employeeRole)) {
@@ -729,6 +837,7 @@ function initEmployeeDashboardPage() {
 
     const billingMessageEl = document.getElementById("billingDeskMessage");
     const cashierMessageEl = document.getElementById("cashierDeskMessage");
+    const employeeProfileMessage = document.getElementById("employeeProfileMessage");
     const billingAppointmentsList = document.getElementById("billingAppointmentsList");
     const billList = document.getElementById("employeeBillsList");
 
@@ -795,6 +904,29 @@ function initEmployeeDashboardPage() {
     document.getElementById("employeeLogoutButton").addEventListener("click", () => {
         localStorage.removeItem(STORAGE_KEYS.employee);
         window.location.href = "index.html";
+    });
+
+    employeeProfileForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const formData = new FormData(employeeProfileForm);
+        const updatedEmployee = {
+            ...employee,
+            name: formData.get("name").trim(),
+            designation: formData.get("designation").trim(),
+            phone: formData.get("phone").trim(),
+            password: formData.get("password").trim()
+        };
+
+        try {
+            await tryPut(`/employee-profile/${employee.emp_id}`, updatedEmployee);
+        } catch (error) {
+            // Keep local profile editable even if backend is temporarily unreachable.
+        }
+
+        setStoredValue(STORAGE_KEYS.employee, updatedEmployee);
+        document.getElementById("employeeNameValue").textContent = updatedEmployee.name;
+        document.getElementById("employeeRoleValue").textContent = updatedEmployee.designation;
+        showMessage(employeeProfileMessage, "Employee profile updated successfully.", "success");
     });
 }
 

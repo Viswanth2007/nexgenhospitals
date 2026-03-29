@@ -46,7 +46,7 @@
                 <div class="panel-header">
                     <div>
                         <p class="card-label">Current Status</p>
-                        <h2>Doctor authentication is enabled</h2>
+                        <h2>Doctor profile</h2>
                     </div>
                 </div>
                 <div class="profile-card">
@@ -54,6 +54,32 @@
                     <div class="profile-row"><span>Doctor ID</span><span id="doctorIdValue">-</span></div>
                     <div class="profile-row"><span>Department</span><span id="doctorDepartmentValue">-</span></div>
                 </div>
+                <form id="doctorProfileForm" class="appointment-form">
+                    <div class="field-grid">
+                        <div class="field">
+                            <label for="doctorProfileName">Name</label>
+                            <input id="doctorProfileName" name="name" type="text" required>
+                        </div>
+                        <div class="field">
+                            <label for="doctorProfileSpecialization">Specialization</label>
+                            <input id="doctorProfileSpecialization" name="specialization" type="text" required>
+                        </div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <label for="doctorProfilePhone">Phone Number</label>
+                            <input id="doctorProfilePhone" name="phone" type="tel" required>
+                        </div>
+                        <div class="field">
+                            <label for="doctorProfilePassword">Password</label>
+                            <input id="doctorProfilePassword" name="password" type="password" required>
+                        </div>
+                    </div>
+
+                    <button class="cta-button" type="submit">Update Profile</button>
+                </form>
+                <p id="doctorProfileMessage" class="status-message" aria-live="polite"></p>
             </section>
 
             <section id="doctor-appointments" class="panel">
