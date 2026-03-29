@@ -109,6 +109,86 @@ function getEmployeeRole(employee) {
     return employee.role || employee.designation || employee.employee_role || "";
 }
 
+function formatDateForInput(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+}
+
+function formatTimeForInput(date) {
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    return `${hours}:${minutes}`;
+}
+
+function getNextAvailableAppointmentDate(now = new Date()) {
+    const nextDate = new Date(now);
+    if (now.getHours() >= 18) {
+        nextDate.setDate(nextDate.getDate() + 1);
+    }
+    return formatDateForInput(nextDate);
+}
+
+function updateAppointmentDateTimeLimits() {
+    const dateInput = document.getElementById("appointmentDate");
+    const timeInput = document.getElementById("appointmentTime");
+    if (!dateInput || !timeInput) {
+        return;
+    }
+
+    const now = new Date();
+    const today = formatDateForInput(now);
+    const minBookableDate = getNextAvailableAppointmentDate(now);
+    const selectedDate = dateInput.value || minBookableDate;
+
+    dateInput.min = minBookableDate;
+    if (!dateInput.value || dateInput.value < minBookableDate) {
+        dateInput.value = minBookableDate;
+    }
+
+    timeInput.min = "09:00";
+    timeInput.max = "18:00";
+
+    if (selectedDate === today) {
+        const currentTime = formatTimeForInput(now);
+        timeInput.min = currentTime > "09:00" ? currentTime : "09:00";
+    }
+
+    if (timeInput.value) {
+        if (timeInput.value < timeInput.min || timeInput.value > timeInput.max) {
+            timeInput.value = "";
+        }
+    }
+}
+
+function isValidAppointmentSlot(dateValue, timeValue) {
+    if (!dateValue || !timeValue) {
+        return false;
+    }
+
+    const now = new Date();
+    const today = formatDateForInput(now);
+    const minBookableDate = getNextAvailableAppointmentDate(now);
+
+    if (dateValue < minBookableDate) {
+        return false;
+    }
+
+    if (timeValue < "09:00" || timeValue > "18:00") {
+        return false;
+    }
+
+    if (dateValue === today) {
+        const currentTime = formatTimeForInput(now);
+        if (timeValue < (currentTime > "09:00" ? currentTime : "09:00")) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 function isBillingRole(role) {
     const normalized = normalizeText(role);
     return normalized.includes("billing");
@@ -446,9 +526,14 @@ function initDashboardPage() {
 
     const appointmentMessage = document.getElementById("appointmentMessage");
     const patient = getLoggedInPatient();
+    const appointmentDateInput = document.getElementById("appointmentDate");
+
+    updateAppointmentDateTimeLimits();
+    appointmentDateInput.addEventListener("change", updateAppointmentDateTimeLimits);
 
     appointmentForm.addEventListener("submit", async (event) => {
         event.preventDefault();
+        updateAppointmentDateTimeLimits();
         const formData = new FormData(appointmentForm);
         const appointment = {
             id: Date.now(),
@@ -460,6 +545,11 @@ function initDashboardPage() {
             problem: formData.get("problem").trim(),
             status: "Pending"
         };
+
+        if (!isValidAppointmentSlot(appointment.appointmentDate, appointment.appointmentTime)) {
+            showMessage(appointmentMessage, "Appointments can only be booked from today onward, during hospital hours from 9:00 AM to 6:00 PM.", "error");
+            return;
+        }
 
         try {
             await tryPost("/book", {
